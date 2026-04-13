@@ -1,0 +1,26 @@
+{
+  "name": "ContratoYa — Documentos legales para autónomos",
+  "short_name": "ContratoYa",
+  "description": "Genera contratos, facturas y documentos legales para autónomos en España",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1f36",
+  "theme_color": "#1a1f36",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es"
+}

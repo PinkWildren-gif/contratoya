@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>ContratoYa — Plantillas de documentos para autonomos en Espana</title>
+    <meta name="description" content="Genera borradores de contratos, facturas, presupuestos y documentos profesionales para autonomos y freelancers en Espana. Plantillas basadas en la normativa espanola. Gratis." />
+    <meta name="keywords" content="contrato autónomo, factura autónomo, NDA, presupuesto, documentos legales España, RGPD, plantilla contrato servicios, factura IVA IRPF" />
+    <meta name="author" content="ContratoYa" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://contratoya.es" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ContratoYa — Plantillas de documentos para autonomos" />
+    <meta property="og:description" content="Genera borradores de contratos, facturas y documentos profesionales en minutos. Plantillas basadas en la normativa espanola." />
+    <meta property="og:url" content="https://contratoya.es" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="ContratoYa" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ContratoYa — Plantillas de documentos para autonomos" />
+    <meta name="twitter:description" content="Genera borradores de contratos, facturas y documentos profesionales en minutos." />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1a1f36" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ContratoYa" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {})
+        })
+      }
+    </script>
+  </body>
+</html>
