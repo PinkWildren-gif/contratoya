@@ -74,6 +74,9 @@ export function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-2 sm:gap-4">
+              <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="text-xs bg-navy-700 px-2 py-1 rounded text-gray-300 hover:text-white transition-colors">
+                {lang === 'es' ? 'EN' : 'ES'}
+              </button>
               <Link to="/auth/login" className="hidden sm:inline text-sm text-gray-300 hover:text-white transition-colors">
                 {t('nav.login')}
               </Link>
