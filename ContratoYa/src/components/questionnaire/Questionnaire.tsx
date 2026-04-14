@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import type { DocumentConfig, FieldConfig } from '@/types/questionnaire'
 import { ChevronLeft, ChevronRight, FileDown } from 'lucide-react'
 
@@ -44,7 +45,8 @@ function renderField(
   field: FieldConfig,
   value: unknown,
   onChange: (name: string, value: unknown) => void,
-  errors: Record<string, string>
+  errors: Record<string, string>,
+  t: (key: string) => string
 ) {
   const commonProps = {
     label: field.label + (field.required ? ' *' : ''),
@@ -82,7 +84,7 @@ function renderField(
             onChange={(e) => onChange(field.name, e.target.value)}
             className={`input-field ${errors[field.name] ? 'border-red-500' : ''}`}
           >
-            <option value="">Seleccionar...</option>
+            <option value="">{t('questionnaire.select')}</option>
             {field.options?.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
@@ -143,6 +145,7 @@ function renderField(
 }
 
 export function Questionnaire({ config, initialData, onComplete, loading }: QuestionnaireProps) {
+  const { t } = useLanguage()
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState<Record<string, unknown>>(() => {
     const defaults: Record<string, unknown> = {}
@@ -176,7 +179,7 @@ export function Questionnaire({ config, initialData, onComplete, loading }: Ques
       if (field.required) {
         const val = formData[field.name]
         if (val === undefined || val === null || val === '' || (typeof val === 'string' && !val.trim())) {
-          newErrors[field.name] = 'Este campo es obligatorio'
+          newErrors[field.name] = t('questionnaire.required')
         }
       }
     }
@@ -209,7 +212,7 @@ export function Questionnaire({ config, initialData, onComplete, loading }: Ques
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {visibleFields.map((field) => (
               <div key={field.name} className={field.width === 'half' ? '' : 'sm:col-span-2'}>
-                {renderField(field, formData[field.name], handleChange, errors)}
+                {renderField(field, formData[field.name], handleChange, errors, t as (key: string) => string)}
               </div>
             ))}
           </div>
@@ -222,18 +225,18 @@ export function Questionnaire({ config, initialData, onComplete, loading }: Ques
             disabled={currentStep === 0}
           >
             <ChevronLeft className="h-4 w-4" />
-            Anterior
+            {t('questionnaire.prev')}
           </Button>
 
           <Button onClick={handleNext} loading={loading}>
             {isLastStep ? (
               <>
                 <FileDown className="h-4 w-4" />
-                Generar documento
+                {t('questionnaire.generate')}
               </>
             ) : (
               <>
-                Siguiente
+                {t('questionnaire.next')}
                 <ChevronRight className="h-4 w-4" />
               </>
             )}

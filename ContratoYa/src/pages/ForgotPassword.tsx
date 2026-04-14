@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { supabase } from '@/lib/supabase'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { FileText, Mail } from 'lucide-react'
@@ -14,6 +15,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function ForgotPassword() {
+  const { t } = useLanguage()
   const [sent, setSent] = useState(false)
   const [serverError, setServerError] = useState('')
 
@@ -41,13 +43,13 @@ export function ForgotPassword() {
             <Mail className="h-8 w-8" />
           </div>
           <h2 className="text-2xl font-serif font-bold text-navy-800 mb-2">
-            Revisa tu email
+            {t('auth.forgot.sent.title')}
           </h2>
           <p className="text-gray-500 mb-6">
-            Si existe una cuenta con ese email, recibirás un enlace para restablecer tu contraseña.
+            {t('auth.forgot.sent.message')}
           </p>
           <Link to="/auth/login">
-            <Button variant="outline">Volver a iniciar sesión</Button>
+            <Button variant="outline">{t('auth.forgot.back')}</Button>
           </Link>
         </div>
       </div>
@@ -63,10 +65,10 @@ export function ForgotPassword() {
             <span className="text-2xl font-serif font-bold">ContratoYa</span>
           </Link>
           <h1 className="text-2xl font-serif font-bold text-navy-800 mt-6 mb-2">
-            Recuperar contraseña
+            {t('auth.forgot.title')}
           </h1>
           <p className="text-gray-500">
-            Introduce tu email y te enviaremos un enlace para restablecer tu contraseña
+            {t('auth.forgot.subtitle')}
           </p>
         </div>
 
@@ -78,21 +80,21 @@ export function ForgotPassword() {
               </div>
             )}
             <Input
-              label="Email"
+              label={t('auth.login.email')}
               type="email"
               placeholder="tu@email.com"
               error={errors.email?.message}
               {...register('email')}
             />
             <Button type="submit" loading={isSubmitting} className="w-full">
-              Enviar enlace de recuperación
+              {t('auth.forgot.submit')}
             </Button>
           </form>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
           <Link to="/auth/login" className="text-success-600 hover:text-success-700 font-medium">
-            Volver a iniciar sesión
+            {t('auth.forgot.back')}
           </Link>
         </p>
       </div>

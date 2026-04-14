@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { signUpSchema, type SignUpFormData } from '@/types/forms'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
@@ -10,6 +11,7 @@ import { FileText } from 'lucide-react'
 
 export function SignUp() {
   const { signUp } = useAuth()
+  const { t } = useLanguage()
   const [serverError, setServerError] = useState('')
   const [success, setSuccess] = useState(false)
 
@@ -35,13 +37,13 @@ export function SignUp() {
             <FileText className="h-8 w-8" />
           </div>
           <h2 className="text-2xl font-serif font-bold text-navy-800 mb-2">
-            ¡Cuenta creada!
+            {t('auth.signup.success.title')}
           </h2>
           <p className="text-gray-500 mb-6">
-            Revisa tu email para confirmar tu cuenta.
+            {t('auth.signup.success.message')}
           </p>
           <Link to="/auth/login">
-            <Button variant="outline">Ir a iniciar sesion</Button>
+            <Button variant="outline">{t('auth.signup.success.login')}</Button>
           </Link>
         </div>
       </div>
@@ -57,10 +59,10 @@ export function SignUp() {
             <span className="text-2xl font-serif font-bold">ContratoYa</span>
           </Link>
           <h1 className="text-2xl font-serif font-bold text-navy-800 mt-6 mb-2">
-            Crear cuenta
+            {t('auth.signup.title')}
           </h1>
           <p className="text-gray-500">
-            Empieza a generar documentos legales en minutos
+            {t('auth.signup.subtitle')}
           </p>
         </div>
 
@@ -73,7 +75,7 @@ export function SignUp() {
             )}
 
             <Input
-              label="Email"
+              label={t('auth.login.email')}
               type="email"
               placeholder="tu@email.com"
               error={errors.email?.message}
@@ -81,7 +83,7 @@ export function SignUp() {
             />
 
             <Input
-              label="Contraseña"
+              label={t('auth.login.password')}
               type="password"
               placeholder="Mínimo 6 caracteres"
               error={errors.password?.message}
@@ -89,7 +91,7 @@ export function SignUp() {
             />
 
             <Input
-              label="Confirmar contraseña"
+              label={t('auth.signup.confirmPassword')}
               type="password"
               placeholder="Repite tu contraseña"
               error={errors.confirmPassword?.message}
@@ -104,15 +106,15 @@ export function SignUp() {
                   {...register('acceptTerms')}
                 />
                 <span className="text-xs text-gray-500 leading-relaxed">
-                  He leido y acepto las{' '}
+                  {t('auth.signup.terms')}{' '}
                   <Link to="/terms" className="text-success-600 hover:text-success-700 underline" target="_blank">
-                    Condiciones de Uso
+                    {t('auth.signup.termsLink')}
                   </Link>{' '}
                   y la{' '}
                   <Link to="/privacy" className="text-success-600 hover:text-success-700 underline" target="_blank">
-                    Politica de Privacidad
+                    {t('auth.signup.privacyLink')}
                   </Link>.
-                  Entiendo que ContratoYa no es un despacho de abogados y no proporciona asesoramiento juridico.
+                  {' '}{t('auth.signup.termsDisclaimer')}
                 </span>
               </label>
               {errors.acceptTerms && (
@@ -121,15 +123,15 @@ export function SignUp() {
             </div>
 
             <Button type="submit" loading={isSubmitting} className="w-full">
-              Crear cuenta gratis
+              {t('auth.signup.submit')}
             </Button>
           </form>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          ¿Ya tienes cuenta?{' '}
+          {t('auth.signup.hasAccount')}{' '}
           <Link to="/auth/login" className="text-success-600 hover:text-success-700 font-medium">
-            Iniciar sesión
+            {t('auth.signup.loginLink')}
           </Link>
         </p>
       </div>

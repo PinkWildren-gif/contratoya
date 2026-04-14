@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { supabase } from '@/lib/supabase'
 import { generatePdf } from '@/lib/pdf'
 import { Card } from '@/components/ui/Card'
@@ -25,6 +26,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export function Documents() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -77,15 +79,15 @@ export function Documents() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-navy-800">Mis documentos</h1>
+          <h1 className="text-2xl font-serif font-bold text-navy-800">{t('documents.title')}</h1>
           <p className="text-gray-500 text-sm mt-1">
-            Historial de todos tus documentos generados
+            {t('documents.subtitle')}
           </p>
         </div>
         <Link to="/dashboard">
           <Button size="sm">
             <Plus className="h-4 w-4" />
-            Nuevo
+            {t('documents.new')}
           </Button>
         </Link>
       </div>
@@ -94,13 +96,13 @@ export function Documents() {
         <Card>
           <EmptyState
             icon={<FolderOpen className="h-12 w-12" />}
-            title="Sin documentos todavía"
-            description="Genera tu primer documento desde el panel principal"
+            title={t('documents.noDocsTitle')}
+            description={t('documents.noDocsDesc')}
             action={
               <Link to="/dashboard">
                 <Button>
                   <Plus className="h-4 w-4" />
-                  Crear documento
+                  {t('documents.create')}
                 </Button>
               </Link>
             }
@@ -158,17 +160,17 @@ export function Documents() {
       <Modal
         open={deleteConfirm !== null}
         onClose={() => setDeleteConfirm(null)}
-        title="Eliminar documento"
+        title={t('documents.deleteTitle')}
       >
         <p className="text-gray-600 mb-6">
-          ¿Estas seguro de que quieres eliminar este documento? Esta accion no se puede deshacer.
+          {t('documents.deleteConfirm')}
         </p>
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-            Cancelar
+            {t('common.cancel')}
           </Button>
           <Button variant="danger" onClick={() => deleteConfirm && handleDelete(deleteConfirm)}>
-            Eliminar
+            {t('common.delete')}
           </Button>
         </div>
       </Modal>

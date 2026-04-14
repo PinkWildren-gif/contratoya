@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useToast } from '@/components/ui/Toast'
 import { useProfiles } from '@/hooks/useProfiles'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
@@ -12,6 +13,7 @@ import { Plus, User, Pencil, Trash2, Loader2 } from 'lucide-react'
 export function Profile() {
   const { profiles, loading, createProfile, updateProfile, deleteProfile } = useProfiles()
   const { showSuccess } = useToast()
+  const { t } = useLanguage()
   const [showForm, setShowForm] = useState(false)
   const [editingProfile, setEditingProfile] = useState<BusinessProfile | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -43,21 +45,21 @@ export function Profile() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-navy-800">Mi perfil de autónomo</h1>
+          <h1 className="text-2xl font-serif font-bold text-navy-800">{t('profile.title')}</h1>
           <p className="text-gray-500 text-sm mt-1">
-            Tus datos fiscales se rellenarán automáticamente en cada documento
+            {t('profile.subtitle')}
           </p>
         </div>
         <Button onClick={() => setShowForm(true)} size="sm">
           <Plus className="h-4 w-4" />
-          Añadir perfil
+          {t('profile.add')}
         </Button>
       </div>
 
       {showForm && (
         <Card className="mb-6" padding="lg">
           <h2 className="text-lg font-semibold text-navy-800 mb-4">
-            {editingProfile ? 'Editar perfil' : 'Nuevo perfil de autónomo'}
+            {editingProfile ? t('profile.edit') : t('profile.new')}
           </h2>
           <ProfileForm
             profile={editingProfile}
@@ -65,7 +67,7 @@ export function Profile() {
               const result = editingProfile
                 ? await updateProfile(editingProfile.id, data)
                 : await createProfile(data)
-              if (!result.error) showSuccess(editingProfile ? 'Perfil actualizado' : 'Perfil creado')
+              if (!result.error) showSuccess(editingProfile ? t('profile.saved') : t('profile.created'))
               return result
             }}
             onCancel={handleClose}
@@ -77,12 +79,12 @@ export function Profile() {
         <Card>
           <EmptyState
             icon={<User className="h-12 w-12" />}
-            title="Sin perfil de autónomo"
-            description="Añade tu perfil con tus datos fiscales para que se rellenen automáticamente en tus documentos"
+            title={t('profile.empty.title')}
+            description={t('profile.empty.desc')}
             action={
               <Button onClick={() => setShowForm(true)}>
                 <Plus className="h-4 w-4" />
-                Crear mi perfil
+                {t('profile.empty.cta')}
               </Button>
             }
           />
@@ -130,17 +132,17 @@ export function Profile() {
       <Modal
         open={deleteConfirm !== null}
         onClose={() => setDeleteConfirm(null)}
-        title="Eliminar perfil"
+        title={t('profile.delete.title')}
       >
         <p className="text-gray-600 mb-6">
-          ¿Estás seguro de que quieres eliminar este perfil? Esta acción no se puede deshacer.
+          {t('profile.delete.confirm')}
         </p>
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-            Cancelar
+            {t('common.cancel')}
           </Button>
           <Button variant="danger" onClick={() => deleteConfirm && handleDelete(deleteConfirm)}>
-            Eliminar
+            {t('common.delete')}
           </Button>
         </div>
       </Modal>

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useToast } from '@/components/ui/Toast'
 import { useContacts } from '@/hooks/useContacts'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
@@ -12,6 +13,7 @@ import { Plus, Users, Pencil, Trash2, Search, Loader2 } from 'lucide-react'
 export function Contacts() {
   const { contacts, loading, createContact, updateContact, deleteContact } = useContacts()
   const { showSuccess } = useToast()
+  const { t } = useLanguage()
   const [showForm, setShowForm] = useState(false)
   const [editingContact, setEditingContact] = useState<Contact | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -55,21 +57,21 @@ export function Contacts() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-navy-800">Contactos</h1>
+          <h1 className="text-2xl font-serif font-bold text-navy-800">{t('contacts.title')}</h1>
           <p className="text-gray-500 text-sm mt-1">
-            Guarda los datos de tus clientes para reutilizarlos en tus documentos
+            {t('contacts.subtitle')}
           </p>
         </div>
         <Button onClick={() => setShowForm(true)} size="sm">
           <Plus className="h-4 w-4" />
-          Añadir contacto
+          {t('contacts.add')}
         </Button>
       </div>
 
       {showForm && (
         <Card className="mb-6" padding="lg">
           <h2 className="text-lg font-semibold text-navy-800 mb-4">
-            {editingContact ? 'Editar contacto' : 'Nuevo contacto'}
+            {editingContact ? t('contacts.edit') : t('contacts.new')}
           </h2>
           <ContactForm
             contact={editingContact}
@@ -77,7 +79,7 @@ export function Contacts() {
               const result = editingContact
                 ? await updateContact(editingContact.id, data)
                 : await createContact(data)
-              if (!result.error) showSuccess(editingContact ? 'Contacto actualizado' : 'Contacto creado')
+              if (!result.error) showSuccess(editingContact ? t('contacts.saved') : t('contacts.created'))
               return result
             }}
             onCancel={handleClose}
@@ -90,7 +92,7 @@ export function Contacts() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Buscar por nombre, NIF o email..."
+            placeholder={t('contacts.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input-field pl-10"
@@ -102,12 +104,12 @@ export function Contacts() {
         <Card>
           <EmptyState
             icon={<Users className="h-12 w-12" />}
-            title="Sin contactos"
-            description="Añade a tus clientes para rellenar sus datos automáticamente en contratos y facturas"
+            title={t('contacts.empty.title')}
+            description={t('contacts.empty.desc')}
             action={
               <Button onClick={() => setShowForm(true)}>
                 <Plus className="h-4 w-4" />
-                Añadir primer contacto
+                {t('contacts.empty.cta')}
               </Button>
             }
           />
@@ -149,7 +151,7 @@ export function Contacts() {
           ))}
           {searchQuery && filteredContacts.length === 0 && (
             <p className="text-center text-gray-500 py-8">
-              No se encontraron contactos para &quot;{searchQuery}&quot;
+              {t('contacts.noResults')} &quot;{searchQuery}&quot;
             </p>
           )}
         </div>
@@ -158,17 +160,17 @@ export function Contacts() {
       <Modal
         open={deleteConfirm !== null}
         onClose={() => setDeleteConfirm(null)}
-        title="Eliminar contacto"
+        title={t('contacts.delete.title')}
       >
         <p className="text-gray-600 mb-6">
-          ¿Estás seguro de que quieres eliminar este contacto? Esta acción no se puede deshacer.
+          {t('contacts.delete.confirm')}
         </p>
         <div className="flex gap-3 justify-end">
           <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-            Cancelar
+            {t('common.cancel')}
           </Button>
           <Button variant="danger" onClick={() => deleteConfirm && handleDelete(deleteConfirm)}>
-            Eliminar
+            {t('common.delete')}
           </Button>
         </div>
       </Modal>

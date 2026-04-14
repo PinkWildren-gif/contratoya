@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+import { LanguageProvider } from '@/lib/i18n/LanguageContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AuthGuard } from '@/components/auth/AuthGuard'
@@ -31,6 +32,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <ErrorBoundary>
+      <LanguageProvider>
       <BrowserRouter>
         <AuthProvider>
           <ToastProvider>
@@ -63,6 +65,7 @@ export default function App() {
           </ToastProvider>
         </AuthProvider>
       </BrowserRouter>
+      </LanguageProvider>
     </ErrorBoundary>
   )
 }

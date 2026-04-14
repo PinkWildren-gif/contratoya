@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -32,6 +33,7 @@ const smallIconMap: Record<string, React.ReactNode> = {
 
 export function Dashboard() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [recentDocs, setRecentDocs] = useState<Document[]>([])
   const [loadingDocs, setLoadingDocs] = useState(true)
 
@@ -67,7 +69,7 @@ export function Dashboard() {
       {/* Welcome */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-serif font-bold text-navy-800">
-          Bienvenido a ContratoYa
+          {t('dashboard.welcome')}
         </h1>
         <p className="text-gray-500 mt-1">
           {user?.email}
@@ -76,7 +78,7 @@ export function Dashboard() {
 
       {/* Quick actions */}
       <div className="mb-10">
-        <h2 className="text-lg font-semibold text-navy-800 mb-4">Crear nuevo documento</h2>
+        <h2 className="text-lg font-semibold text-navy-800 mb-4">{t('dashboard.newDoc')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.values(DOCUMENT_TYPES).map((docType) => (
             <Link
@@ -101,10 +103,10 @@ export function Dashboard() {
       {/* Recent documents */}
       <div className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-navy-800">Documentos recientes</h2>
+          <h2 className="text-lg font-semibold text-navy-800">{t('dashboard.recent')}</h2>
           {recentDocs.length > 0 && (
             <Link to="/documents" className="text-sm text-success-600 hover:text-success-700 font-medium">
-              Ver todos
+              {t('dashboard.viewAll')}
             </Link>
           )}
         </div>
@@ -116,12 +118,12 @@ export function Dashboard() {
           <Card>
             <EmptyState
               icon={<FolderOpen className="h-12 w-12" />}
-              title="Sin documentos todavia"
-              description="Crea tu primer documento seleccionando uno de los tipos de arriba"
+              title={t('dashboard.noDocsTitle')}
+              description={t('dashboard.noDocsDesc')}
               action={
                 <Link to="/profile" className="btn-primary inline-flex items-center gap-2">
                   <Plus className="h-4 w-4" />
-                  Configurar mi perfil primero
+                  {t('dashboard.setupProfile')}
                 </Link>
               }
             />
@@ -172,12 +174,12 @@ export function Dashboard() {
       {/* Quick links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link to="/profile" className="card p-5 hover:shadow-md transition-shadow">
-          <h3 className="font-medium text-navy-800 mb-1">Mi perfil de autónomo</h3>
-          <p className="text-sm text-gray-500">Configura tus datos fiscales para reutilizarlos en todos tus documentos</p>
+          <h3 className="font-medium text-navy-800 mb-1">{t('dashboard.profileLink')}</h3>
+          <p className="text-sm text-gray-500">{t('dashboard.profileDesc')}</p>
         </Link>
         <Link to="/contacts" className="card p-5 hover:shadow-md transition-shadow">
-          <h3 className="font-medium text-navy-800 mb-1">Directorio de contactos</h3>
-          <p className="text-sm text-gray-500">Guarda los datos de tus clientes para acceder a ellos rápidamente</p>
+          <h3 className="font-medium text-navy-800 mb-1">{t('dashboard.contactsLink')}</h3>
+          <p className="text-sm text-gray-500">{t('dashboard.contactsDesc')}</p>
         </Link>
       </div>
     </div>

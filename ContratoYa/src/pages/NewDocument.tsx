@@ -7,6 +7,7 @@ import { generatePdf } from '@/lib/pdf'
 import { supabase } from '@/lib/supabase'
 import { useProfiles } from '@/hooks/useProfiles'
 import { useSubscription } from '@/hooks/useSubscription'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { Button } from '@/components/ui/Button'
 import type { DocumentType } from '@/types/database'
 import { FREE_TIER_LIMIT, TEMPLATE_VERSION } from '@/lib/constants'
@@ -17,6 +18,7 @@ export function NewDocument() {
   const { user } = useAuth()
   const { profiles } = useProfiles()
   const { canGenerate, remainingDocs, tier, incrementCount } = useSubscription()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [generated, setGenerated] = useState(false)
   const [formData, setFormData] = useState<Record<string, unknown>>({})
@@ -33,13 +35,13 @@ export function NewDocument() {
       <div className="max-w-3xl mx-auto px-4 py-12 text-center">
         <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
         <h1 className="text-2xl font-serif font-bold text-navy-800 mb-2">
-          Documento no disponible
+          {t('newDoc.unavailable.title')}
         </h1>
         <p className="text-gray-500 mb-6">
-          Este tipo de documento aún no está disponible. Estamos trabajando en ello.
+          {t('newDoc.unavailable.desc')}
         </p>
         <Link to="/dashboard">
-          <Button variant="outline">Volver al panel</Button>
+          <Button variant="outline">{t('newDoc.back')}</Button>
         </Link>
       </div>
     )
@@ -152,7 +154,7 @@ export function NewDocument() {
             <FileText className="h-8 w-8" />
           </div>
           <h1 className="text-2xl font-serif font-bold text-navy-800 mb-2">
-            ¡Documento generado!
+            {t('newDoc.generated.title')}
           </h1>
           <p className="text-gray-500">
             {config.generateTitle(formData)}
@@ -165,7 +167,7 @@ export function NewDocument() {
             <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-amber-800 font-medium mb-2">
-                Antes de descargar, confirme que ha revisado el documento:
+                {t('newDoc.download.title')}
               </p>
               <label className="flex items-start gap-2 cursor-pointer">
                 <input
@@ -175,9 +177,7 @@ export function NewDocument() {
                   className="mt-1 h-4 w-4 rounded border-gray-300 text-success-600 focus:ring-success-500"
                 />
                 <span className="text-xs text-amber-700 leading-relaxed">
-                  He revisado este documento y entiendo que ContratoYa <strong>no garantiza su exactitud,
-                  completitud ni idoneidad legal</strong>. Me comprometo a obtener asesoramiento juridico
-                  independiente antes de firmarlo o utilizarlo para cualquier proposito legal.
+                  {t('newDoc.download.checkbox')}
                 </span>
               </label>
             </div>
@@ -187,7 +187,7 @@ export function NewDocument() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Button onClick={handleDownload} size="lg" disabled={!downloadConfirmed}>
             <Download className="h-5 w-5" />
-            Descargar PDF
+            {t('newDoc.generated.download')}
           </Button>
           <Button variant="outline" onClick={() => {
             if (pdfDataUrl) {
@@ -198,7 +198,7 @@ export function NewDocument() {
             }
           }}>
             <Eye className="h-5 w-5" />
-            Vista previa
+            {t('newDoc.generated.preview')}
           </Button>
         </div>
 
@@ -208,17 +208,17 @@ export function NewDocument() {
             <iframe
               src={pdfDataUrl}
               className="w-full h-[600px] border-0"
-              title="Vista previa del documento"
+              title={t('newDoc.generated.preview')}
             />
           </div>
         )}
 
         <div className="flex gap-4 justify-center">
           <Link to="/dashboard">
-            <Button variant="ghost">Volver al panel</Button>
+            <Button variant="ghost">{t('newDoc.generated.back')}</Button>
           </Link>
           <Button variant="outline" onClick={() => { setGenerated(false); setPdfDataUrl(null) }}>
-            Editar y regenerar
+            {t('newDoc.generated.edit')}
           </Button>
         </div>
       </div>
@@ -232,7 +232,7 @@ export function NewDocument() {
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-navy-800 mb-6 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        Volver al panel
+        {t('newDoc.back')}
       </Link>
 
       <div className="mb-8">
@@ -243,8 +243,8 @@ export function NewDocument() {
         {tier === 'free' && (
           <p className="text-xs text-gray-400 mt-2">
             {remainingDocs > 0
-              ? `Te quedan ${remainingDocs} documento(s) gratis este mes`
-              : 'Has alcanzado el límite del plan gratuito'}
+              ? `${t('newDoc.remainingPrefix')} ${remainingDocs} ${t('newDoc.remaining')}`
+              : t('newDoc.limitReached')}
           </p>
         )}
       </div>
@@ -253,14 +253,13 @@ export function NewDocument() {
         <div className="card p-8 text-center">
           <Lock className="h-12 w-12 text-gray-300 mx-auto mb-4" />
           <h2 className="text-xl font-serif font-bold text-navy-800 mb-2">
-            Limite mensual alcanzado
+            {t('newDoc.limitTitle')}
           </h2>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            Has usado tus {FREE_TIER_LIMIT} documentos gratuitos de este mes.
-            Pasa a Pro para generar documentos ilimitados.
+            {t('used')} {FREE_TIER_LIMIT} {t('newDoc.limitDesc')}
           </p>
           <Link to="/pricing">
-            <Button size="lg">Ver planes Pro</Button>
+            <Button size="lg">{t('newDoc.limitCta')}</Button>
           </Link>
         </div>
       ) : !disclaimerAccepted ? (
@@ -270,23 +269,14 @@ export function NewDocument() {
               <AlertTriangle className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-navy-800 mb-1">Aviso legal importante</h2>
-              <p className="text-sm text-gray-500">Lea y acepte antes de continuar</p>
+              <h2 className="text-lg font-semibold text-navy-800 mb-1">{t('newDoc.disclaimer.title')}</h2>
+              <p className="text-sm text-gray-500">{t('newDoc.disclaimer.subtitle')}</p>
             </div>
           </div>
           <div className="bg-gray-50 rounded-lg p-5 mb-6 text-sm text-gray-700 space-y-3">
-            <p>
-              <strong>ContratoYa no es un despacho de abogados</strong> y no proporciona asesoramiento juridico.
-              Los documentos generados son plantillas orientativas basadas en la informacion que usted proporciona.
-            </p>
-            <p>
-              Los documentos <strong>pueden contener errores, omisiones o imprecisiones</strong>. Usted es el unico
-              responsable de revisar y verificar cualquier documento antes de firmarlo o utilizarlo.
-            </p>
-            <p>
-              <strong>Le recomendamos encarecidamente</strong> consultar con un abogado colegiado antes de
-              utilizar cualquier documento generado para fines legales.
-            </p>
+            <p>{t('newDoc.disclaimer.p1')}</p>
+            <p>{t('newDoc.disclaimer.p2')}</p>
+            <p>{t('newDoc.disclaimer.p3')}</p>
           </div>
           <label className="flex items-start gap-3 cursor-pointer mb-6">
             <input
@@ -296,15 +286,14 @@ export function NewDocument() {
               className="mt-1 h-4 w-4 rounded border-gray-300 text-success-600 focus:ring-success-500"
             />
             <span className="text-sm text-gray-600">
-              Entiendo y acepto que los documentos generados no constituyen asesoramiento juridico y que
-              debo revisarlos cuidadosamente antes de su uso. Acepto las{' '}
+              {t('newDoc.disclaimer.checkbox')}{' '}
               <Link to="/terms" className="text-success-600 hover:text-success-700 underline" target="_blank">
-                Condiciones de Uso
+                {t('common.termsOfService')}
               </Link>.
             </span>
           </label>
           <Button onClick={() => setDisclaimerAccepted(true)} disabled={!disclaimerChecked} className="w-full">
-            Continuar con la generacion del documento
+            {t('newDoc.disclaimer.continue')}
           </Button>
         </div>
       ) : (

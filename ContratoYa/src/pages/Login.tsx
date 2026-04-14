@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { loginSchema, type LoginFormData } from '@/types/forms'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
@@ -10,6 +11,7 @@ import { FileText } from 'lucide-react'
 
 export function Login() {
   const { signIn } = useAuth()
+  const { t } = useLanguage()
   const navigate = useNavigate()
   const location = useLocation()
   const [serverError, setServerError] = useState('')
@@ -23,7 +25,7 @@ export function Login() {
     setServerError('')
     const { error } = await signIn(data.email, data.password)
     if (error) {
-      setServerError('Email o contraseña incorrectos')
+      setServerError(t('auth.login.error'))
     } else {
       navigate(from, { replace: true })
     }
@@ -38,10 +40,10 @@ export function Login() {
             <span className="text-2xl font-serif font-bold">ContratoYa</span>
           </Link>
           <h1 className="text-2xl font-serif font-bold text-navy-800 mt-6 mb-2">
-            Iniciar sesión
+            {t('auth.login.title')}
           </h1>
           <p className="text-gray-500">
-            Accede a tu cuenta para gestionar tus documentos
+            {t('auth.login.subtitle')}
           </p>
         </div>
 
@@ -54,7 +56,7 @@ export function Login() {
             )}
 
             <Input
-              label="Email"
+              label={t('auth.login.email')}
               type="email"
               placeholder="tu@email.com"
               error={errors.email?.message}
@@ -62,7 +64,7 @@ export function Login() {
             />
 
             <Input
-              label="Contraseña"
+              label={t('auth.login.password')}
               type="password"
               placeholder="••••••••"
               error={errors.password?.message}
@@ -70,21 +72,21 @@ export function Login() {
             />
 
             <Button type="submit" loading={isSubmitting} className="w-full">
-              Iniciar sesión
+              {t('auth.login.submit')}
             </Button>
 
             <div className="text-center">
               <Link to="/auth/forgot-password" className="text-sm text-gray-500 hover:text-success-600 transition-colors">
-                ¿Olvidaste tu contraseña?
+                {t('auth.login.forgot')}
               </Link>
             </div>
           </form>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          ¿No tienes cuenta?{' '}
+          {t('auth.login.noAccount')}{' '}
           <Link to="/auth/signup" className="text-success-600 hover:text-success-700 font-medium">
-            Regístrate gratis
+            {t('auth.login.signupLink')}
           </Link>
         </p>
       </div>
