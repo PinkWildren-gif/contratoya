@@ -74,14 +74,14 @@ export function ResetPassword() {
             <Input
               label={t('auth.reset.newPassword')}
               type="password"
-              placeholder="Mínimo 6 caracteres"
+              placeholder={t('auth.password.placeholder')}
               error={errors.password?.message}
               {...register('password')}
             />
             <Input
               label={t('auth.signup.confirmPassword')}
               type="password"
-              placeholder="Repite tu contraseña"
+              placeholder={t('auth.confirmPassword.placeholder')}
               error={errors.confirmPassword?.message}
               {...register('confirmPassword')}
             />

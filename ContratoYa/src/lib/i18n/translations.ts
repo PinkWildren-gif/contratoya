@@ -86,6 +86,9 @@ const translations = {
   'auth.login.signupLink': { es: 'Registrate gratis', en: 'Sign up free' },
   'auth.login.error': { es: 'Email o contrasena incorrectos', en: 'Incorrect email or password' },
 
+  'auth.password.placeholder': { es: 'Minimo 6 caracteres', en: 'Minimum 6 characters' },
+  'auth.confirmPassword.placeholder': { es: 'Repite tu contrasena', en: 'Repeat your password' },
+
   'auth.signup.title': { es: 'Crear cuenta', en: 'Create Account' },
   'auth.signup.subtitle': { es: 'Empieza a generar documentos legales en minutos', en: 'Start generating legal documents in minutes' },
   'auth.signup.confirmPassword': { es: 'Confirmar contrasena', en: 'Confirm Password' },
