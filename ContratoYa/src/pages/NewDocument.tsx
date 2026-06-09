@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase'
 import { useProfiles } from '@/hooks/useProfiles'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useToast } from '@/components/ui/Toast'
 import { Button } from '@/components/ui/Button'
 import type { DocumentType } from '@/types/database'
 import { FREE_TIER_LIMIT, TEMPLATE_VERSION } from '@/lib/constants'
@@ -19,6 +20,7 @@ export function NewDocument() {
   const { profiles } = useProfiles()
   const { canGenerate, remainingDocs, tier, incrementCount } = useSubscription()
   const { t } = useLanguage()
+  const { showError } = useToast()
   const [loading, setLoading] = useState(false)
   const [generated, setGenerated] = useState(false)
   const [formData, setFormData] = useState<Record<string, unknown>>({})
@@ -134,6 +136,7 @@ export function NewDocument() {
       setGenerated(true)
     } catch (err) {
       console.error('Error generating document:', err)
+      showError(t('newDoc.generateError'))
     } finally {
       setLoading(false)
     }

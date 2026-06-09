@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { businessProfileSchema, type BusinessProfileFormData } from '@/types/forms'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 import type { BusinessProfile } from '@/types/database'
 
 interface ProfileFormProps {
@@ -12,6 +13,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile, onSubmit, onCancel }: ProfileFormProps) {
+  const { t } = useLanguage()
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<BusinessProfileFormData>({
     resolver: zodResolver(businessProfileSchema),
     defaultValues: profile ? {
@@ -37,21 +39,21 @@ export function ProfileForm({ profile, onSubmit, onCancel }: ProfileFormProps) {
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <Input
-        label="Nombre completo o razón social *"
+        label={t('profileForm.name')}
         placeholder="Juan García López"
         error={errors.name?.message}
         {...register('name')}
       />
 
       <Input
-        label="NIF *"
+        label={t('profileForm.nif')}
         placeholder="12345678A"
         error={errors.nif?.message}
         {...register('nif')}
       />
 
       <Input
-        label="Dirección *"
+        label={t('profileForm.address')}
         placeholder="Calle Mayor 1, 2ºB"
         error={errors.address?.message}
         {...register('address')}
@@ -59,13 +61,13 @@ export function ProfileForm({ profile, onSubmit, onCancel }: ProfileFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="Ciudad *"
+          label={t('profileForm.city')}
           placeholder="Madrid"
           error={errors.city?.message}
           {...register('city')}
         />
         <Input
-          label="Código postal *"
+          label={t('profileForm.postalCode')}
           placeholder="28001"
           error={errors.postal_code?.message}
           {...register('postal_code')}
@@ -73,22 +75,22 @@ export function ProfileForm({ profile, onSubmit, onCancel }: ProfileFormProps) {
       </div>
 
       <Input
-        label="Actividad IAE"
+        label={t('profileForm.iae')}
         placeholder="Ej: 861 - Pintores, escultores..."
-        helperText="Epígrafe de tu actividad económica"
+        helperText={t('profileForm.iaeHelper')}
         error={errors.iae_activity?.message}
         {...register('iae_activity')}
       />
 
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="Teléfono"
+          label={t('profileForm.phone')}
           placeholder="612 345 678"
           error={errors.phone?.message}
           {...register('phone')}
         />
         <Input
-          label="Email"
+          label={t('profileForm.email')}
           type="email"
           placeholder="tu@email.com"
           error={errors.email?.message}
@@ -104,16 +106,16 @@ export function ProfileForm({ profile, onSubmit, onCancel }: ProfileFormProps) {
           {...register('is_new_autonomo')}
         />
         <label htmlFor="is_new_autonomo" className="text-sm text-navy-700">
-          Soy autónomo nuevo (menos de 3 años) — retención IRPF al 7%
+          {t('profileForm.newAutonomo')}
         </label>
       </div>
 
       <div className="flex gap-3 pt-2">
         <Button type="submit" loading={isSubmitting}>
-          {profile ? 'Guardar cambios' : 'Crear perfil'}
+          {profile ? t('common.save') : t('profileForm.create')}
         </Button>
         <Button type="button" variant="outline" onClick={onCancel}>
-          Cancelar
+          {t('common.cancel')}
         </Button>
       </div>
     </form>

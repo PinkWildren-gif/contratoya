@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useToast } from '@/components/ui/Toast'
 import { supabase } from '@/lib/supabase'
 import { generatePdf } from '@/lib/pdf'
 import { Card } from '@/components/ui/Card'
@@ -26,7 +27,8 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export function Documents() {
   const { user } = useAuth()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const { showError } = useToast()
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -57,12 +59,12 @@ export function Documents() {
       const pdf = generatePdf(doc.document_type, doc.form_data as Record<string, unknown>)
       pdf.save(`${doc.title || 'documento'}.pdf`)
     } catch {
-      alert('Este tipo de documento aún no soporta descarga PDF.')
+      showError(t('documents.downloadError'))
     }
   }
 
   const formatDate = (dateStr: string) => {
-    return new Intl.DateTimeFormat('es-ES', {
+    return new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'es-ES', {
       day: 'numeric', month: 'short', year: 'numeric'
     }).format(new Date(dateStr))
   }
@@ -120,7 +122,7 @@ export function Documents() {
                       {docTypeInfo ? iconMap[docTypeInfo.icon] : <FileText className="h-5 w-5" />}
                     </div>
                     <div>
-                      <h3 className="font-medium text-navy-800">{doc.title || 'Sin título'}</h3>
+                      <h3 className="font-medium text-navy-800">{doc.title || t('documents.noTitle')}</h3>
                       <div className="flex gap-3 text-sm text-gray-400 mt-0.5">
                         <span>{docTypeInfo?.label || doc.document_type}</span>
                         <span>{formatDate(doc.created_at)}</span>
@@ -131,21 +133,21 @@ export function Documents() {
                     <Link
                       to={`/documents/${doc.id}/edit`}
                       className="p-2 text-gray-400 hover:text-navy-600 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Editar"
+                      title={t('documents.edit')}
                     >
                       <Pencil className="h-4 w-4" />
                     </Link>
                     <button
                       onClick={() => handleDownload(doc)}
                       className="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-lg transition-colors"
-                      title="Descargar PDF"
+                      title={t('documents.downloadPdf')}
                     >
                       <Download className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(doc.id)}
                       className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Eliminar"
+                      title={t('documents.deleteBtn')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

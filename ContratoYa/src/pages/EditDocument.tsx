@@ -5,6 +5,7 @@ import { Questionnaire } from '@/components/questionnaire/Questionnaire'
 import { getDocumentConfig } from '@/lib/document-configs'
 import { generatePdf } from '@/lib/pdf'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useToast } from '@/components/ui/Toast'
 import { Button } from '@/components/ui/Button'
 import type { Document, DocumentType } from '@/types/database'
 import { TEMPLATE_VERSION } from '@/lib/constants'
@@ -14,6 +15,7 @@ export function EditDocument() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useLanguage()
+  const { showError } = useToast()
   const [document, setDocument] = useState<Document | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -86,6 +88,7 @@ export function EditDocument() {
       setGenerated(true)
     } catch (err) {
       console.error('Error:', err)
+      showError(t('editDoc.saveError'))
     } finally {
       setSaving(false)
     }

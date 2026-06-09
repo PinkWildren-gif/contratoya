@@ -295,6 +295,48 @@ const translations = {
   'questionnaire.required': { es: 'Este campo es obligatorio', en: 'This field is required' },
   'questionnaire.select': { es: 'Seleccionar...', en: 'Select...' },
 
+  // Profile Form
+  'profileForm.name': { es: 'Nombre completo o razon social *', en: 'Full name or business name *' },
+  'profileForm.nif': { es: 'NIF *', en: 'NIF (Tax ID) *' },
+  'profileForm.address': { es: 'Direccion *', en: 'Address *' },
+  'profileForm.city': { es: 'Ciudad *', en: 'City *' },
+  'profileForm.postalCode': { es: 'Codigo postal *', en: 'Postal code *' },
+  'profileForm.iae': { es: 'Actividad IAE', en: 'IAE Activity' },
+  'profileForm.iaeHelper': { es: 'Epigrafe de tu actividad economica', en: 'Your economic activity code' },
+  'profileForm.phone': { es: 'Telefono', en: 'Phone' },
+  'profileForm.email': { es: 'Email', en: 'Email' },
+  'profileForm.newAutonomo': { es: 'Soy autonomo nuevo (menos de 3 anos) — retencion IRPF al 7%', en: "I'm a new freelancer (less than 3 years) — 7% income tax withholding" },
+  'profileForm.create': { es: 'Crear perfil', en: 'Create profile' },
+
+  // Contact Form
+  'contactForm.name': { es: 'Nombre o razon social *', en: 'Name or business name *' },
+  'contactForm.nif': { es: 'NIF/CIF', en: 'NIF/CIF (Tax ID)' },
+  'contactForm.address': { es: 'Direccion', en: 'Address' },
+  'contactForm.city': { es: 'Ciudad', en: 'City' },
+  'contactForm.postalCode': { es: 'Codigo postal', en: 'Postal code' },
+  'contactForm.email': { es: 'Email', en: 'Email' },
+  'contactForm.phone': { es: 'Telefono', en: 'Phone' },
+  'contactForm.create': { es: 'Anadir contacto', en: 'Add contact' },
+
+  // Dashboard extras
+  'dashboard.downloadError': { es: 'Error al descargar el documento', en: 'Error downloading the document' },
+  'dashboard.noTitle': { es: 'Sin titulo', en: 'Untitled' },
+  'dashboard.edit': { es: 'Editar', en: 'Edit' },
+  'dashboard.downloadPdf': { es: 'Descargar PDF', en: 'Download PDF' },
+
+  // Documents extras
+  'documents.downloadError': { es: 'Este tipo de documento aun no soporta descarga PDF', en: 'This document type does not support PDF download yet' },
+  'documents.noTitle': { es: 'Sin titulo', en: 'Untitled' },
+  'documents.edit': { es: 'Editar', en: 'Edit' },
+  'documents.downloadPdf': { es: 'Descargar PDF', en: 'Download PDF' },
+  'documents.deleteBtn': { es: 'Eliminar', en: 'Delete' },
+
+  // NewDocument extras
+  'newDoc.generateError': { es: 'Error al generar el documento. Intentalo de nuevo.', en: 'Error generating the document. Please try again.' },
+
+  // EditDocument extras
+  'editDoc.saveError': { es: 'Error al guardar los cambios. Intentalo de nuevo.', en: 'Error saving changes. Please try again.' },
+
   // Has to use
   'used': { es: 'Has usado tus', en: "You've used your" },
 } as const

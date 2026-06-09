@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useToast } from '@/components/ui/Toast'
 import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -33,7 +34,8 @@ const smallIconMap: Record<string, React.ReactNode> = {
 
 export function Dashboard() {
   const { user } = useAuth()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const { showError } = useToast()
   const [recentDocs, setRecentDocs] = useState<Document[]>([])
   const [loadingDocs, setLoadingDocs] = useState(true)
 
@@ -57,12 +59,12 @@ export function Dashboard() {
       const pdf = generatePdf(doc.document_type, doc.form_data as Record<string, unknown>)
       pdf.save(`${doc.title || 'documento'}.pdf`)
     } catch {
-      alert('Error al descargar el documento.')
+      showError(t('dashboard.downloadError'))
     }
   }
 
   const formatDate = (dateStr: string) =>
-    new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(dateStr))
+    new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(dateStr))
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -140,7 +142,7 @@ export function Dashboard() {
                         {docTypeInfo ? smallIconMap[docTypeInfo.icon] : <FileText className="h-5 w-5" />}
                       </div>
                       <div>
-                        <h3 className="font-medium text-navy-800 text-sm">{doc.title || 'Sin titulo'}</h3>
+                        <h3 className="font-medium text-navy-800 text-sm">{doc.title || t('dashboard.noTitle')}</h3>
                         <div className="flex gap-3 text-xs text-gray-400 mt-0.5">
                           <span>{docTypeInfo?.label || doc.document_type}</span>
                           <span>{formatDate(doc.created_at)}</span>
@@ -151,14 +153,14 @@ export function Dashboard() {
                       <Link
                         to={`/documents/${doc.id}/edit`}
                         className="p-2 text-gray-400 hover:text-navy-600 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="Editar"
+                        title={t('dashboard.edit')}
                       >
                         <Pencil className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => handleDownload(doc)}
                         className="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-lg transition-colors"
-                        title="Descargar PDF"
+                        title={t('dashboard.downloadPdf')}
                       >
                         <Download className="h-4 w-4" />
                       </button>
